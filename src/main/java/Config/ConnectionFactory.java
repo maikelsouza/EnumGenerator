@@ -8,7 +8,7 @@ public class ConnectionFactory {
 
     public static Connection createConnection() throws SQLException {
 
-        String url = "jdbc:mysql://localhost:3306/loja"; //Nome da base de dados
+        String url = "jdbc:mysql://localhost:3306/condvirtuais2"; //Nome da base de dados
         String user = "root"; //nome do usuário do MySQL
         String password = "root"; //senha do MySQL
 
