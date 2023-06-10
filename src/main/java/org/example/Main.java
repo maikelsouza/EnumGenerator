@@ -1,25 +1,29 @@
 package org.example;
 
 import Config.ConnectionFactory;
+import Service.EnumGenerateService;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.text.Normalizer;
 
 
 public class Main {
+
+
+
+
     public static void main(String[] args){
+
+        EnumGenerateService enumGenerateService = new EnumGenerateService();
         try {
-        System.out.println("Hello world!");
+
 
         File file = new File("EstadoEnum.java");
 
@@ -38,9 +42,23 @@ public class Main {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
-        StringBuffer query = new StringBuffer();
-        query.append("SELECT * FROM  CONFIGURACAO_APLICACAO");
 
+            StringBuffer query = new StringBuffer();
+
+            int total = 0;
+//            while (resultSet.next()){
+//                total = resultSet.getInt("maikel");
+//            }
+
+            System.out.println("total "+ enumGenerateService.generate("TB_TIPO_DOCUMENTO","NO_TIPO_DOCUMENTO", "ID_TIPO_DOCUMENTO" ));
+
+
+
+
+
+        query = new StringBuffer();
+        //query.append("SELECT * FROM (SELECT * FROM  TB_TIPO_DOCUMENTO)   where rownum <= 3");
+        query.append("SELECT * FROM  TB_TIPO_DOCUMENTO ORDER BY ID_TIPO_DOCUMENTO");
             preparedStatement  = connection.prepareStatement(query.toString());
 
         resultSet = preparedStatement.executeQuery();
@@ -54,15 +72,24 @@ public class Main {
             bw.newLine();
 
 
+
         while(resultSet.next()){
-            System.out.println("CHAVE: "+resultSet.getString("CHAVE"));
-            System.out.println("VALOR: "+resultSet.getString("VALOR"));
+            System.out.println("CHAVE: "+removerAcentos(resultSet.getString("NO_TIPO_DOCUMENTO")));
+            System.out.println("VALOR: "+resultSet.getString("ID_TIPO_DOCUMENTO"));
+            System.out.println("ROW "+ resultSet.getRow());
 
-            bw.write( resultSet.getString("CHAVE"));
-            bw.write( "(\"");
+            bw.write( removerAcentos(resultSet.getString("NO_TIPO_DOCUMENTO")));
+//            bw.write( "(\"");
+            bw.write( "(");
+            bw.write( resultSet.getString("ID_TIPO_DOCUMENTO"));
 
-            bw.write( resultSet.getString("VALOR"));
-            bw.write( "\"),");
+            if (total == resultSet.getRow()){
+                bw.write( "L);");
+            }else{
+                bw.write( "L),");
+            }
+
+            //bw.write( "\"),");
             bw.newLine();
 
         }
@@ -78,15 +105,36 @@ public class Main {
 
     }
 
-    private static <E extends Enum> E[] getEnumValues(Class<E> enumClass)
-            throws NoSuchFieldException, IllegalAccessException {
-        Field f = enumClass.getDeclaredField("$VALUES");
-        System.out.println(f);
-        System.out.println(Modifier.toString(f.getModifiers()));
-        f.setAccessible(true);
-        Object o = f.get(null);
-        return (E[]) o;
+
+
+    public static String removerAcentos(String str) {
+        return replaceCloseParenthesesForUnderscore5(replaceCloseParenthesesForUnderscore(replaceOpenParenthesesForUnderscore(replaceSlashForUnderscore(replaceBlankForUnderscore(Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", ""))))));
     }
+
+    public static String replaceBlankForUnderscore(String str){
+        return str.replace(" ","_");
+    }
+
+    public static String replaceSlashForUnderscore(String str){
+        return str.replace("/","_");
+    }
+
+    public static String replaceOpenParenthesesForUnderscore(String str){
+        return str.replace("(","");
+    }
+
+    public static String replaceCloseParenthesesForUnderscore(String str){
+        return str.replace(")","");
+    }
+
+    public static String replaceCloseParenthesesForUnderscore5(String str){
+        return str.replace("-","_");
+    }
+
+
+
+
+
 
 
 //    public List<Condominio> buscarListaCondominios() throws SQLException, Exception{
