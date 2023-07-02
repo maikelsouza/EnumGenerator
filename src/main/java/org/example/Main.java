@@ -1,7 +1,8 @@
 package org.example;
 
 import Config.ConnectionFactory;
-import Service.EnumGenerateService;
+import Service.TableService;
+import Util.FileUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,9 +22,10 @@ public class Main {
 
     public static void main(String[] args){
 
-        EnumGenerateService enumGenerateService = new EnumGenerateService();
+        TableService enumGenerateService = new TableService();
         try {
 
+            System.out.println(FileUtil.transformCamelCase(FileUtil.removePrefix("TB_TIPO_DOCUMENTO",3),"_"));
 
         File file = new File("EstadoEnum.java");
 

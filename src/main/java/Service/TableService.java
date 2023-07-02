@@ -6,9 +6,9 @@ import model.Row;
 import java.io.File;
 import java.util.List;
 
-public class EnumGenerateService {
+public class TableService {
 
-    TableOracleDAO tableDAO = new TableOracleDAO();
+    private TableOracleDAO tableDAO = new TableOracleDAO();
 
     public long generate(final String tableName, final String key, final String value){
 
@@ -20,11 +20,15 @@ public class EnumGenerateService {
         return this.tableDAO.findCount("TB_TIPO_DOCUMENTO");
     }
 
+//    private void createFile(final String tableName){
+//        File file = new File(tableName.concat(".java"));
+//    }
+
     private long findCount(final String tableName){
-        return  this.tableDAO.findCount("TB_TIPO_DOCUMENTO");
+        return  this.tableDAO.findCount(tableName);
     }
 
-    private List<Row> findAll(final String tableName, final String key, final String value){
+    public List<Row> findAll(final String tableName, final String key, final String value){
         return this.tableDAO.findAll(tableName,key,value);
     }
 
