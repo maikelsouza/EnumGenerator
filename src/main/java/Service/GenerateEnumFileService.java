@@ -121,13 +121,15 @@ public class GenerateEnumFileService {
                                        final Integer type, final String lastKey) throws IOException {
         bw.write("    ");
         bw.write(treatData(key));
-        bw.write( "(" );
-        bw.write(valeu);
         if (type == KIND_OF_LONG) {
+            bw.write( "(" );
+            bw.write(valeu);
             bw.write("L)");
         }
         if (type == KIND_OF_STRING) {
-            bw.write(")");
+            bw.write( "(\"" );
+            bw.write(valeu);
+            bw.write("\")");
         }
         if (key.equals(lastKey)){
             bw.write(";");
@@ -156,6 +158,8 @@ public class GenerateEnumFileService {
         str = this.removeCloseParentheses(str);
         str = this.removeComma(str);
         str = this.removeDot(str);
+        str = this.removeTwoPoint(str);
+        str = this.replaceAmpersandForUnderscoreEUnderscore(str);
         return this.replaceDashParenthesesForUnderscore(str);
     }
 
@@ -174,9 +178,13 @@ public class GenerateEnumFileService {
     }
     private String removeCloseParentheses(String str){ return str.replace(")",""); }
     private String removeComma(String str){ return str.replace(",",""); }
+    private String removeTwoPoint(String str){ return str.replace(":",""); }
     private String removeDot(String str){ return str.replace(".",""); }
     private String upperCase(String str){ return str.toUpperCase(); }
     public static String replaceDashParenthesesForUnderscore(String str){
         return str.replace("-","_");
+    }
+    public static String replaceAmpersandForUnderscoreEUnderscore(String str){
+        return str.replace("&","_E_");
     }
 }
