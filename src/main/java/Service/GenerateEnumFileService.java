@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
 
 public class GenerateEnumFileService {
@@ -23,50 +24,75 @@ public class GenerateEnumFileService {
 
     private static final Integer KIND_OF_LONG = 1;
 
+    private static final String DIRECTORY_PATH_ENUM = "src"+ File.separator+"main"+File.separator+"java"+File.separator+"Enuns";
+
     private TableService tableService;
 
 
-    public void createFile(final String tableName){
-
-        String fileName = this.constructorFileName(tableName);
-
-        var file = new File(tableName);
+    public File createFile(final String tableName){
+        return new File(tableName);
     }
 
-    private void writeFile(File file, String fileName, List<Row> rows) throws IOException {
+    public String buildAbsoluteFileName(final String fileName){
+        String pathProject = System.getProperty("user.dir");
+        return pathProject+File.separator+DIRECTORY_PATH_ENUM+File.separator+fileName;
+    }
 
-        var fw = new FileWriter(file);
-        var bw = new BufferedWriter( fw );
+    public void writeFile(File file, String enumName, List<Row> rows){
 
-        writePackageName(bw);
-        bw.newLine();
-        bw.newLine();
-        writeImports(bw);
-        bw.newLine();
-        bw.newLine();
-        writeAnnotations(bw);
-        writeNameEnum(bw, fileName);
-        bw.newLine();
-        bw.newLine();
-
-        for (Row row: rows) {
-            writeKeyAndValueEnum(bw, row.getKey(), row.getValue(),KIND_OF_LONG);
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(file);
+            bw = new BufferedWriter( fw );
+            writePackageName(bw);
             bw.newLine();
+            bw.newLine();
+            writeImports(bw);
+            bw.newLine();
+            bw.newLine();
+            writeAnnotations(bw);
+            bw.newLine();
+            writeNameEnum(bw, enumName);
+            bw.newLine();
+            bw.newLine();
+            for (Row row: rows) {
+                writeKeyAndValueEnum(bw, row.getKey(), row.getValue(),KIND_OF_LONG, rows.get(rows.size()-1).getKey());
+                bw.newLine();
+                bw.newLine();
+            }
+            bw.newLine();
+            writePropertieEnum(bw,KIND_OF_LONG);
+            bw.newLine();
+            bw.write( "}" );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    if (bw != null){
+                        bw.close();
+                    }
+                    if (fw != null){
+                        fw.close();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+
+                }
+            }
         }
-        bw.newLine();
-        writePropertieEnum(bw,KIND_OF_LONG);
-        bw.write( "}" );
-        bw.close();
-        fw.close();
+
+    public String constructorFileName(final String tableName){
+
+        String fileName = constructorNameEnum(tableName);
+        return  fileName.concat(DOT_JAVA);
     }
 
-    private String constructorFileName(final String tableName){
+    public static String constructorNameEnum(String tableName) {
 
         String fileName = FileUtil.removePrefix(tableName,QUANTITY_CHARACTER_REMOVE_PREFIX);
         fileName = FileUtil.transformCamelCase(fileName,UNDERLINE);
-        fileName = fileName.concat(ENUM).concat(DOT_JAVA);
-
-        return  fileName;
+        return fileName.concat(ENUM);
     }
 
     private void writePackageName( BufferedWriter bw ) throws IOException {
@@ -82,7 +108,7 @@ public class GenerateEnumFileService {
     private void writeAnnotations( BufferedWriter bw ) throws IOException {
         bw.write( "@AllArgsConstructor" );
         bw.newLine();
-        bw.write( "@Getter;" );
+        bw.write( "@Getter" );
     }
 
     private void writeNameEnum( BufferedWriter bw, final String enumName ) throws IOException {
@@ -91,24 +117,66 @@ public class GenerateEnumFileService {
         bw.write( "{ " );
     }
 
-    private void writeKeyAndValueEnum( BufferedWriter bw, final String key, final String valeu, final Integer type) throws IOException {
-        bw.write(key);
+    private void writeKeyAndValueEnum( BufferedWriter bw, final String key, final String valeu,
+                                       final Integer type, final String lastKey) throws IOException {
+        bw.write("    ");
+        bw.write(treatData(key));
         bw.write( "(" );
         bw.write(valeu);
         if (type == KIND_OF_LONG) {
             bw.write("L)");
         }
         if (type == KIND_OF_STRING) {
-            bw.write(");");
+            bw.write(")");
         }
+        if (key.equals(lastKey)){
+            bw.write(";");
+        }else{
+            bw.write(",");
+        }
+
     }
 
     private void writePropertieEnum( BufferedWriter bw, final Integer type ) throws IOException {
+        bw.write("    ");
         if (type == KIND_OF_LONG){
-            bw.write("private Long id;");
+            bw.write("private final Long id;");
         }
         if (type == KIND_OF_STRING){
-            bw.write("private String id;");
+            bw.write("private final String id;");
         }
+    }
+
+    private String treatData(String str){
+        str = this.upperCase(str);
+        str = this.removeAccents(str);
+        str = this.replaceBlankSpaceForUnderscore(str);
+        str = this.replaceSlashForUnderscore(str);
+        str = this.removeOpenParentheses(str);
+        str = this.removeCloseParentheses(str);
+        str = this.removeComma(str);
+        str = this.removeDot(str);
+        return this.replaceDashParenthesesForUnderscore(str);
+    }
+
+    public static String removeAccents(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    private String replaceBlankSpaceForUnderscore(String str){
+        return str.replace(" ","_");
+    }
+    private String replaceSlashForUnderscore(String str){
+        return str.replace("/","_");
+    }
+    private String removeOpenParentheses(String str){
+        return str.replace("(","");
+    }
+    private String removeCloseParentheses(String str){ return str.replace(")",""); }
+    private String removeComma(String str){ return str.replace(",",""); }
+    private String removeDot(String str){ return str.replace(".",""); }
+    private String upperCase(String str){ return str.toUpperCase(); }
+    public static String replaceDashParenthesesForUnderscore(String str){
+        return str.replace("-","_");
     }
 }

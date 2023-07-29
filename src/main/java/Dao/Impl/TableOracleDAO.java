@@ -87,7 +87,7 @@ public class TableOracleDAO implements ITable {
             String query = "SELECT * FROM ALL_TABLES WHERE TABLE_NAME = '" + tableName +"'";
             preparedStatement = connection.prepareStatement(query);
             var resultSet = preparedStatement.executeQuery();
-            exist =resultSet.next();
+            exist = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

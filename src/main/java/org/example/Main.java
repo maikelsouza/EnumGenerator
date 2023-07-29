@@ -1,6 +1,7 @@
 package org.example;
 
 import Config.ConnectionFactory;
+import Service.GenerateEnumService;
 import Service.TableService;
 import Util.FileUtil;
 
@@ -18,14 +19,27 @@ import java.text.Normalizer;
 public class Main {
 
 
+    public static void main(String[] args) throws IOException {
+
+        var generateEnumService = new GenerateEnumService();
+
+        try {
+
+            //generateEnumService.generate("TB_TIPO_DOCUMENTO", "NO_TIPO_DOCUMENTO", "ID_TIPO_DOCUMENTO" );
+            generateEnumService.generate("TB_ESPECIE_ARMA", "NO_ESPECIE_ARMA", "ID_ESPECIE_ARMA" );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
-    public static void main(String[] args){
+    public static void main2(String[] args){
 
         TableService enumGenerateService = new TableService();
         try {
 
-            System.out.println(FileUtil.transformCamelCase(FileUtil.removePrefix("TB_TIPO_DOCUMENTO",3),"_"));
+            System.out.println(FileUtil.transformCamelCase(FileUtil.removePrefix("TB_TIPO_DOCUMENTO.java",3),"_"));
 
         File file = new File("EstadoEnum.java");
 
@@ -59,8 +73,8 @@ public class Main {
 
 
         query = new StringBuffer();
-        //query.append("SELECT * FROM (SELECT * FROM  TB_TIPO_DOCUMENTO)   where rownum <= 3");
-        query.append("SELECT * FROM  TB_TIPO_DOCUMENTO ORDER BY ID_TIPO_DOCUMENTO");
+        //query.append("SELECT * FROM (SELECT * FROM  TB_TIPO_DOCUMENTO.java)   where rownum <= 3");
+        query.append("SELECT * FROM  TB_TIPO_DOCUMENTO.java ORDER BY ID_TIPO_DOCUMENTO");
             preparedStatement  = connection.prepareStatement(query.toString());
 
         resultSet = preparedStatement.executeQuery();

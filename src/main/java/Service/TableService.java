@@ -3,7 +3,6 @@ package Service;
 import Dao.Impl.TableOracleDAO;
 import model.Row;
 
-import java.io.File;
 import java.util.List;
 
 public class TableService {
@@ -17,12 +16,9 @@ public class TableService {
         System.out.println(tableDAO.existColumns(tableName, key, value));
 
 
-        return this.tableDAO.findCount("TB_TIPO_DOCUMENTO");
+        return this.tableDAO.findCount("TB_TIPO_DOCUMENTO.java");
     }
 
-//    private void createFile(final String tableName){
-//        File file = new File(tableName.concat(".java"));
-//    }
 
     private long findCount(final String tableName){
         return  this.tableDAO.findCount(tableName);
@@ -32,11 +28,11 @@ public class TableService {
         return this.tableDAO.findAll(tableName,key,value);
     }
 
-    private boolean existTable(final String tableName){
+    public boolean existTable(final String tableName){
         return this.tableDAO.existTable(tableName);
     }
 
-    private boolean existColumns(final String tableName, final String key, final String value){
+    public boolean existColumns(final String tableName, final String key, final String value){
         return this.tableDAO.existColumns(tableName,key, value );
     }
 
