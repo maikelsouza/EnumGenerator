@@ -7,9 +7,9 @@ import java.util.List;
 
 public class GenerateEnumService {
 
-    private GenerateEnumFileService generateEnumFileService = new GenerateEnumFileService();
+    private final GenerateEnumFileService generateEnumFileService = new GenerateEnumFileService();
 
-    private TableService tableService = new TableService();
+    private final TableService tableService = new TableService();
 
 
     public String generate(final String tableName, final String key, final String value, final Integer typeProperty) throws Exception {

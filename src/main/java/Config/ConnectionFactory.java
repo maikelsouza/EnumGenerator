@@ -2,21 +2,19 @@ package Config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    public static Connection createConnection() throws SQLException {
+    public static Connection createConnection() throws Exception {
 
-        String url = "jdbc:mysql://localhost:3306/condvirtuais2"; //Nome da base de dados
-        String user = "root"; //nome do usuário do MySQL
-        String password = "root"; //senha do MySQL
+        String url = "jdbc:oracle:thin:@//xxxxxx:1521/yyyyyy";
+        String user = "user";
+        String password = "password";
 
-
-
-
-        // TODO: VERIFCAR ONDE CONFIGURAR O SCHEMA
-
-        return DriverManager.getConnection(url, user, password);
+        try {
+            return DriverManager.getConnection(url, user, password);
+        } catch (Exception e) {
+            throw new Exception("Error to generate enum: Is not possible to connect with the database");
+        }
     }
 }

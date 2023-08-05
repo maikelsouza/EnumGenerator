@@ -86,7 +86,7 @@ public class GenerateEnumFileService {
         return  fileName.concat(DOT_JAVA);
     }
 
-    public static String constructorNameEnum(String tableName) {
+    public String constructorNameEnum(String tableName) {
 
         String fileName = FileUtil.removePrefix(tableName,QUANTITY_CHARACTER_REMOVE_PREFIX);
         fileName = FileUtil.transformCamelCase(fileName,UNDERLINE);
@@ -161,7 +161,7 @@ public class GenerateEnumFileService {
         return this.replaceDashParenthesesForUnderscore(str);
     }
 
-    public static String removeAccents(String str) {
+    public  String removeAccents(String str) {
         return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
@@ -179,10 +179,10 @@ public class GenerateEnumFileService {
     private String removeTwoPoint(String str){ return str.replace(":",""); }
     private String removeDot(String str){ return str.replace(".",""); }
     private String upperCase(String str){ return str.toUpperCase(); }
-    public static String replaceDashParenthesesForUnderscore(String str){
+    public String replaceDashParenthesesForUnderscore(String str){
         return str.replace("-","_");
     }
-    public static String replaceAmpersandForUnderscoreEUnderscore(String str){
+    public  String replaceAmpersandForUnderscoreEUnderscore(String str){
         return str.replace("&","_E_");
     }
 }

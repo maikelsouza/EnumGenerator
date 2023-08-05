@@ -22,7 +22,6 @@
             <version>5.9.0</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc8</artifactId>
@@ -31,20 +30,18 @@
             <systemPath>${project.basedir}/lib/ojdbc8.jar</systemPath>
         </dependency>
 
-
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
 
     </dependencies>
 
