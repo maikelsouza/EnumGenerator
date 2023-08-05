@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.List;
+import java.util.Objects;
 
 public class GenerateEnumFileService {
 
@@ -20,13 +21,11 @@ public class GenerateEnumFileService {
 
     private static final Integer QUANTITY_CHARACTER_REMOVE_PREFIX = 3;
 
-    private static final Integer KIND_OF_STRING = 0;
+    private static final Integer TYPE_PROPERTY_STRING = 0;
 
-    private static final Integer KIND_OF_LONG = 1;
+    private static final Integer TYPE_PROPERTY_LONG = 1;
 
     private static final String DIRECTORY_PATH_ENUM = "src"+ File.separator+"main"+File.separator+"java"+File.separator+"Enuns";
-
-    private TableService tableService;
 
 
     public File createFile(final String tableName){
@@ -38,7 +37,7 @@ public class GenerateEnumFileService {
         return pathProject+File.separator+DIRECTORY_PATH_ENUM+File.separator+fileName;
     }
 
-    public void writeFile(File file, String enumName, List<Row> rows){
+    public void writeFile(File file, String enumName, List<Row> rows, final Integer typeProperty){
 
         FileWriter fw = null;
         BufferedWriter bw = null;
@@ -57,12 +56,12 @@ public class GenerateEnumFileService {
             bw.newLine();
             bw.newLine();
             for (Row row: rows) {
-                writeKeyAndValueEnum(bw, row.getKey(), row.getValue(),KIND_OF_LONG, rows.get(rows.size()-1).getKey());
+                writeKeyAndValueEnum(bw, row.getKey(), row.getValue(), typeProperty, rows.get(rows.size()-1).getKey());
                 bw.newLine();
                 bw.newLine();
             }
             bw.newLine();
-            writePropertieEnum(bw,KIND_OF_LONG);
+            writePropertieEnum(bw,typeProperty);
             bw.newLine();
             bw.write( "}" );
             } catch (IOException e) {
@@ -77,7 +76,6 @@ public class GenerateEnumFileService {
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
-
                 }
             }
         }
@@ -118,15 +116,15 @@ public class GenerateEnumFileService {
     }
 
     private void writeKeyAndValueEnum( BufferedWriter bw, final String key, final String valeu,
-                                       final Integer type, final String lastKey) throws IOException {
+                                       final Integer typeProperty, final String lastKey) throws IOException {
         bw.write("    ");
         bw.write(treatData(key));
-        if (type == KIND_OF_LONG) {
+        if (Objects.equals(typeProperty, TYPE_PROPERTY_LONG)) {
             bw.write( "(" );
             bw.write(valeu);
             bw.write("L)");
         }
-        if (type == KIND_OF_STRING) {
+        if (Objects.equals(typeProperty, TYPE_PROPERTY_STRING)) {
             bw.write( "(\"" );
             bw.write(valeu);
             bw.write("\")");
@@ -139,12 +137,12 @@ public class GenerateEnumFileService {
 
     }
 
-    private void writePropertieEnum( BufferedWriter bw, final Integer type ) throws IOException {
+    private void writePropertieEnum( BufferedWriter bw, final Integer typeProperty) throws IOException {
         bw.write("    ");
-        if (type == KIND_OF_LONG){
+        if (Objects.equals(typeProperty,TYPE_PROPERTY_LONG)){
             bw.write("private final Long id;");
         }
-        if (type == KIND_OF_STRING){
+        if (Objects.equals(typeProperty,TYPE_PROPERTY_STRING)){
             bw.write("private final String id;");
         }
     }

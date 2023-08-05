@@ -1,39 +1,62 @@
 package org.example;
 
-import Config.ConnectionFactory;
 import Service.GenerateEnumService;
-import Service.TableService;
-import Util.FileUtil;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Main {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         var generateEnumService = new GenerateEnumService();
 
-        try {
+        List<String> datasEnum = getDatasEnum();
+        System.out.println("");
+        Integer typeProperty = getTypeValueProperty();
+        System.out.println("** Generating Enum **");
 
-            //generateEnumService.generate("TB_TIPO_DOCUMENTO", "NO_TIPO_DOCUMENTO", "ID_TIPO_DOCUMENTO" );
-            //generateEnumService.generate("TB_ESPECIE_ARMA", "NO_ESPECIE_ARMA", "ID_ESPECIE_ARMA" );
-            //generateEnumService.generate("TB_DISCIPLINA", "NO_DISCIPLINA", "ID_DISCIPLINA" );
-            //generateEnumService.generate("TB_CURSO", "DS_CURSO", "ID_CURSO" );
-            generateEnumService.generate("TB_SITUACAO_PESSOA", "DS_SITUACAO_PESSOA", "ID_SITUACAO_PESSOA" );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String enumName = generateEnumService.generate(datasEnum.get(0), datasEnum.get(1), datasEnum.get(2), typeProperty);
 
+        System.out.println("** The Enum: "+ enumName + " was generated **");
+    }
+
+    private static List<String> getDatasEnum(){
+        System.out.println("***** Enter with datas for to create an Enum: ***** ");
+        List<String> datasEnum = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter table name: ");
+        String dataTable = sc.next();
+        System.out.println("Table Name: "+dataTable);
+        datasEnum.add(dataTable);
+        System.out.print("Enter key name of table "+dataTable+": ");
+        String data = sc.next();
+        System.out.println("Key Name: "+data);
+        datasEnum.add(data);
+        System.out.print("Enter valeu name of table "+dataTable+": ");
+        data = sc.next();
+        System.out.println("Value Name: "+data);
+        datasEnum.add(data);
+        return datasEnum;
+    }
+
+    private static Integer getTypeValueProperty(){
+        System.out.println("***** The type of the Enum value property: 0 or 1: ***** ");
+
+        Scanner sc = new Scanner(System.in);
+        var typeProperty = "";
+        do{
+            System.out.print("Enter 0 for String or 1 for Long: ");
+            typeProperty = sc.next();
+            System.out.println("Value type property: "+typeProperty);
+            if (!typeProperty.equals("0") && !typeProperty.equals("1")){
+                System.out.println("Error: Value type property is different than 0 or 1  ");
+            }
+        }while (!typeProperty.equals("0") && !typeProperty.equals("1"));
+        return Integer.valueOf(typeProperty);
     }
 
 }

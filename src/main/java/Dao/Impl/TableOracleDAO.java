@@ -25,7 +25,7 @@ public class TableOracleDAO implements ITable {
             while (resultSet.next()){
                 count = resultSet.getLong("countElements");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }finally{
             try {
@@ -59,7 +59,7 @@ public class TableOracleDAO implements ITable {
                 row.setValue(resultSet.getString(value.toUpperCase()));
                 rows.add(row);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }finally{
             try {
@@ -88,7 +88,7 @@ public class TableOracleDAO implements ITable {
             preparedStatement = connection.prepareStatement(query);
             var resultSet = preparedStatement.executeQuery();
             exist = resultSet.next();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
@@ -125,7 +125,7 @@ public class TableOracleDAO implements ITable {
                     existValue = true;
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
