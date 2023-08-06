@@ -37,13 +37,9 @@ public class GenerateEnumFileService {
         return pathProject+File.separator+DIRECTORY_PATH_ENUM+File.separator+fileName;
     }
 
-    public void writeFile(File file, String enumName, List<Row> rows, final Integer typeProperty){
+    public void writeFile(File file, String enumName, List<Row> rows, final Integer typeProperty) throws IOException {
 
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        try {
-            fw = new FileWriter(file);
-            bw = new BufferedWriter( fw );
+        try (FileWriter fw = new FileWriter(file); BufferedWriter bw = new BufferedWriter(fw)) {
             writePackageName(bw);
             bw.newLine();
             bw.newLine();
@@ -55,30 +51,17 @@ public class GenerateEnumFileService {
             writeNameEnum(bw, enumName);
             bw.newLine();
             bw.newLine();
-            for (Row row: rows) {
-                writeKeyAndValueEnum(bw, row.getKey(), row.getValue(), typeProperty, rows.get(rows.size()-1).getKey());
+            for (Row row : rows) {
+                writeKeyAndValueEnum(bw, row.getKey(), row.getValue(), typeProperty, rows.get(rows.size() - 1).getKey());
                 bw.newLine();
                 bw.newLine();
             }
             bw.newLine();
-            writePropertieEnum(bw,typeProperty);
+            writePropertieEnum(bw, typeProperty);
             bw.newLine();
-            bw.write( "}" );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
-                try {
-                    if (bw != null){
-                        bw.close();
-                    }
-                    if (fw != null){
-                        fw.close();
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            bw.write("}");
         }
+    }
 
     public String constructorFileName(final String tableName){
 
