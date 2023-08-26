@@ -30,15 +30,15 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter table name: ");
         String dataTable = sc.next();
-        System.out.println("Table Name: "+dataTable);
+        System.out.println("Table Name: ".concat(dataTable));
         datasEnum.add(dataTable);
-        System.out.print("Enter key name of table "+dataTable+": ");
+        System.out.print("Enter key name of table ".concat(dataTable).concat(": "));
         String data = sc.next();
-        System.out.println("Key Name: "+data);
+        System.out.println("Key Name: ".concat(data));
         datasEnum.add(data);
-        System.out.print("Enter valeu name of table "+dataTable+": ");
+        System.out.print("Enter valeu name of table ".concat(dataTable).concat(": "));
         data = sc.next();
-        System.out.println("Value Name: "+data);
+        System.out.println("Value Name: ".concat(data));
         datasEnum.add(data);
         return datasEnum;
     }
