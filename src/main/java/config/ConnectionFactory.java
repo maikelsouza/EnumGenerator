@@ -8,9 +8,9 @@ public class ConnectionFactory {
     public static Connection createConnection() throws Exception {
 
 
-        String url = "jdbc:oracle:thin:@//scan-sdfdevxv.pf.gov.br:1521/dpf06ta";
-        String user = "ATURMAUSR";
-        String password = "ATURMAUSR";
+        String url = "jdbc:oracle:thin:@//XYZ:1521/ABC";
+        String user = "XXXXXX";
+        String password = "XXXXXX";
 
         try {
             return DriverManager.getConnection(url, user, password);
