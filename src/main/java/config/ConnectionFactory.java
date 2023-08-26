@@ -1,4 +1,4 @@
-package Config;
+package config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,9 +7,10 @@ public class ConnectionFactory {
 
     public static Connection createConnection() throws Exception {
 
-        String url = "jdbc:oracle:thin:@//xxxxxx:1521/yyyyyy";
-        String user = "user";
-        String password = "password";
+
+        String url = "jdbc:oracle:thin:@//scan-sdfdevxv.pf.gov.br:1521/dpf06ta";
+        String user = "ATURMAUSR";
+        String password = "ATURMAUSR";
 
         try {
             return DriverManager.getConnection(url, user, password);

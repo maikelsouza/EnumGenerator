@@ -1,6 +1,6 @@
 package main;
 
-import Service.GenerateEnumService;
+import service.GenerateEnumService;
 
 import java.util.ArrayList;
 import java.util.List;

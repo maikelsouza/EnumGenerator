@@ -1,6 +1,6 @@
-package Service;
+package service;
 
-import Util.FileUtil;
+import util.FileUtil;
 import model.Row;
 
 import java.io.BufferedWriter;
@@ -25,7 +25,7 @@ public class GenerateEnumFileService {
 
     private static final Integer TYPE_PROPERTY_LONG = 1;
 
-    private static final String DIRECTORY_PATH_ENUM = "src"+ File.separator+"main"+File.separator+"java"+File.separator+"Enuns";
+    private static final String DIRECTORY_PATH_ENUM = "src"+ File.separator+"main"+File.separator+"java"+File.separator+"enuns";
 
 
     public File createFile(final String tableName){
@@ -77,7 +77,7 @@ public class GenerateEnumFileService {
     }
 
     private void writePackageName( BufferedWriter bw ) throws IOException {
-        bw.write( "package Enuns;" );
+        bw.write( "package enuns;" );
     }
 
     private void writeImports( BufferedWriter bw ) throws IOException {

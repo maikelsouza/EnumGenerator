@@ -1,6 +1,6 @@
-package Service;
+package service;
 
-import Dao.Impl.TableOracleDAO;
+import dao.Impl.TableOracleDAO;
 import model.Row;
 
 import java.util.List;

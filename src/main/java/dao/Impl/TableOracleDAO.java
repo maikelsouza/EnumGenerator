@@ -1,8 +1,8 @@
-package Dao.Impl;
+package dao.Impl;
 
 
-import Config.ConnectionFactory;
-import Dao.ITable;
+import config.ConnectionFactory;
+import dao.ITable;
 import model.Row;
 
 import java.sql.*;
